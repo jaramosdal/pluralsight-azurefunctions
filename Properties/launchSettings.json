@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "pluralsight_azurefunctions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7219",
+      "launchBrowser": false
+    }
+  }
+}
