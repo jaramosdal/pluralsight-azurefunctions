@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using pluralsight_azurefunctions.Models;
 
 namespace pluralsight_azurefunctions
 {
@@ -27,13 +28,5 @@ namespace pluralsight_azurefunctions
             log.LogInformation($"Order {order.OrderId} received.");
             return new OkObjectResult($"Thank you for your purchase");
         }
-    }
-
-    public class Order
-    {
-        public string OrderId { get; set; }
-        public string ProductId { get; set; }
-        public string Email { get; set; }
-        public decimal Price { get; set; }
     }
 }
