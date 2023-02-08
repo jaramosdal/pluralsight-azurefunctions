@@ -18,6 +18,7 @@ namespace pluralsight_azurefunctions
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("orders")] IAsyncCollector<Order> orderQueue,
+            [Table("orders")] IAsyncCollector<Order> orderTable,
             ILogger log)
         {
             log.LogInformation("Received a payment.");
