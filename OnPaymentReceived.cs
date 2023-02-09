@@ -26,6 +26,11 @@ namespace pluralsight_azurefunctions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var order = JsonConvert.DeserializeObject<Order>(requestBody);
             await orderQueue.AddAsync(order);
+
+            order.PartitionKey = "orders";
+            order.RowKey= order.OrderId;
+            await orderTable.AddAsync(order);
+
             log.LogInformation($"Order {order.OrderId} received.");
             return new OkObjectResult($"Thank you for your purchase");
         }
