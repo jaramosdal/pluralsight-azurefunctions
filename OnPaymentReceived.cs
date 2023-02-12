@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using pluralsight_azurefunctions.Models;
 
 namespace pluralsight_azurefunctions
 {
@@ -17,6 +18,7 @@ namespace pluralsight_azurefunctions
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
             [Queue("orders")] IAsyncCollector<Order> orderQueue,
+            [Table("orders")] IAsyncCollector<Order> orderTable,
             ILogger log)
         {
             log.LogInformation("Received a payment.");
@@ -24,16 +26,13 @@ namespace pluralsight_azurefunctions
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var order = JsonConvert.DeserializeObject<Order>(requestBody);
             await orderQueue.AddAsync(order);
+
+            order.PartitionKey = "orders";
+            order.RowKey= order.OrderId;
+            await orderTable.AddAsync(order);
+
             log.LogInformation($"Order {order.OrderId} received.");
             return new OkObjectResult($"Thank you for your purchase");
         }
-    }
-
-    public class Order
-    {
-        public string OrderId { get; set; }
-        public string ProductId { get; set; }
-        public string Email { get; set; }
-        public decimal Price { get; set; }
     }
 }
