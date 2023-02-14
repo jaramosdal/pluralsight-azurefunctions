@@ -47,3 +47,22 @@ az functionapp create \
 az functionapp config appsettings set \
     -n $functionAppName -g $resourceGroup \
     --settings "MySetting1=Hello" "MySetting2=World"
+
+# Publicar (necesario haber hecho az login)
+## Azure CLI
+Primero debemos generar el .zip
+dotnet publish -c release
+
+A continuación, publicamos el .zip generado con el comando anterior
+az functionapp deployment source config-zip \
+
+## Azure Functions Core Tools
+func azure functionapp publish $functionAppName 
+    -g $resourceGroup \
+    -n $functionAppName \
+    --src publish.zip
+    
+# Listar configuración
+az functionapp config appsettings list \
+    -g $resourceGroup -n $functionAppName -o table
+
